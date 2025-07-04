@@ -22,6 +22,8 @@ public class Dashboard extends JFrame {
     private static final String BOOKINGS_KEY = "bookings";
     private static final String SUPPORT_EMAIL = "support@firstflight.com";
     private static final String SUPPORT_PHONE = "1-800-FLY-NOW";
+    private static final String BG_MUSIC_FILE = "/fazbear.wav"; 
+    private final MusicPlayer musicPlayer = new MusicPlayer();
     
     // UI Colors
     private final Color PRIMARY_COLOR = new Color(0, 102, 204);
@@ -51,6 +53,7 @@ public class Dashboard extends JFrame {
         setupUI();
         setupWindowListeners();
         setVisible(true);
+        musicPlayer.playMusic(BG_MUSIC_FILE);
     }
 
     private void initializeData() {
@@ -892,11 +895,46 @@ public class Dashboard extends JFrame {
     }
 
     private void showSettingsDialog() {
-        JOptionPane.showMessageDialog(this, 
-            "Settings panel coming soon!\n\nCurrent user: " + username, 
-            "Settings", 
-            JOptionPane.INFORMATION_MESSAGE);
+    JPanel settingsPanel = new JPanel(new BorderLayout(10, 10));
+    settingsPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+    
+    // User info section
+    JPanel userPanel = new JPanel();
+    userPanel.setLayout(new BoxLayout(userPanel, BoxLayout.Y_AXIS));
+    userPanel.setBorder(BorderFactory.createTitledBorder("User Information"));
+    
+    JLabel userLabel = new JLabel("Current User: " + username);
+    userLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    userPanel.add(userLabel);
+    
+    // Music controls section
+    JPanel musicPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+    musicPanel.setBorder(BorderFactory.createTitledBorder("Background Music"));
+    
+    JButton playButton = new JButton("Play");
+    playButton.addActionListener(e -> musicPlayer.playMusic(BG_MUSIC_FILE));
+    
+    JButton stopButton = new JButton("Stop");
+    stopButton.addActionListener(e -> musicPlayer.stopMusic());
+    
+    musicPanel.add(playButton);
+    musicPanel.add(stopButton);
+    
+    // Combine panels
+    JPanel contentPanel = new JPanel();
+    contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+    contentPanel.add(userPanel);
+    contentPanel.add(Box.createVerticalStrut(15));
+    contentPanel.add(musicPanel);
+    
+    settingsPanel.add(contentPanel, BorderLayout.CENTER);
+    
+    JOptionPane.showMessageDialog(this, 
+        settingsPanel, 
+        "Settings", 
+        JOptionPane.PLAIN_MESSAGE);
     }
+    
 
     private void showInfoDialog(String message) {
         JOptionPane.showMessageDialog(this, message);

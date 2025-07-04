@@ -6,12 +6,18 @@ import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import javax.swing.border.LineBorder;
 
 public class LoginSystemWithCaptcha {
     private static int failedAttempts = 0;
     private static Timer lockoutTimer;
     static MusicPlayer player = new MusicPlayer();
     static String currentCaptcha;
+    
+    // Add these as class-level variables
+    private static JTextField usernameField;
+    private static JPasswordField passwordField;
+    private static JTextField captchaField;
 
     public static void main(String[] args) {
         if (UserStorage.loadUsers().isEmpty()) {
@@ -35,49 +41,56 @@ public class LoginSystemWithCaptcha {
             }
         };
         panel.setLayout(null);
-
+        
         // Play background music
         player.playMusic("/fazbear.wav");
-
+        
         // Username
         JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setBounds(250, 100, 100, 25);
-        usernameLabel.setForeground(Color.WHITE);
-        JTextField usernameField = new JTextField();
-        usernameField.setBounds(350, 100, 200, 25);
+        usernameLabel.setBounds(250, 190, 100, 25);
+        usernameLabel.setForeground(new Color(0, 38, 77));
+        usernameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        usernameField = new JTextField(); // Initialize the class-level variable
+        usernameField.setBounds(350, 190, 200, 25);
 
         // Password
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(250, 140, 100, 25);
-        passwordLabel.setForeground(Color.WHITE);
-        JPasswordField passwordField = new JPasswordField();
-        passwordField.setBounds(350, 140, 200, 25);
+        passwordLabel.setBounds(250, 230, 100, 25);
+        passwordLabel.setForeground(new Color(0, 38, 77));
+        passwordLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        passwordField = new JPasswordField(); // Initialize the class-level variable
+        passwordField.setBounds(350, 230, 200, 25);
 
         // CAPTCHA
         JLabel captchaLabel = new JLabel("CAPTCHA:");
-        captchaLabel.setBounds(250, 180, 150, 25);
-        captchaLabel.setForeground(Color.WHITE);
-        JTextField captchaField = new JTextField();
-        captchaField.setBounds(400, 180, 120, 25);
+        captchaLabel.setBounds(230, 270, 150, 25);
+        captchaLabel.setForeground(new Color(50, 50, 50, 180));
+        captchaLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        captchaField = new JTextField(); // Initialize the class-level variable
+        captchaField.setBounds(400, 270, 120, 25);
 
         // Log In button
         JButton loginButton = new JButton("Log In");
-        loginButton.setBounds(330, 230, 120, 30);
+        loginButton.setBounds(330, 320, 120, 30);
+        
+        
+
         
         JButton refreshCaptcha = new JButton("↻");
-        refreshCaptcha.setBounds(550, 180, 30, 25);
+        refreshCaptcha.setBounds(550, 270, 30, 25);
         refreshCaptcha.addActionListener(e -> {
             currentCaptcha = ReCaptcha.generateCaptcha();
             captchaLabel.setText("CAPTCHA: " + currentCaptcha);
             captchaField.setText("");
         });
         panel.add(refreshCaptcha);
+        
 
         // Register link (styled as a hyperlink)
         JLabel registerLink = new JLabel("<html><u>Don't have an account? Register here</u></html>");
-        registerLink.setBounds(300, 280, 300, 30);
+        registerLink.setBounds(300, 370, 300, 30);
         registerLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        registerLink.setForeground(Color.CYAN);
+        registerLink.setForeground(new Color(0, 38, 77));
 
         registerLink.addMouseListener(new MouseAdapter() {
             @Override
@@ -85,6 +98,10 @@ public class LoginSystemWithCaptcha {
                 showRegistrationDialog(frame);
             }
         });
+        
+        captchaLabel.setOpaque(true); // Make the background visible
+        captchaLabel.setBackground(new Color(220, 220, 220, 200)); // Optional: light background
+        captchaLabel.setBorder(new LineBorder(Color.BLACK, 2)); // Black border, 2px thick
 
         // Add components to panel
         panel.add(usernameLabel);

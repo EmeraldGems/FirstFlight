@@ -1,4 +1,4 @@
-// If you just want the file just download it in the releases to the right, the runnablefile folder is a mistake.
+// If you just want the file just download it in the releases to the right, the runnablefile folder is a mistake. pls install java 24
 // FirstFlight Login System
 
 A secure Java Swing application with CAPTCHA verification and user authentication.
